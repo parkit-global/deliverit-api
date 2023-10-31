@@ -19,21 +19,12 @@ Use your API token in the `Authorization` header like this:
 Authorization: Bearer YOUR_API_TOKEN
 ----
 
-== Error Codes
 
-|===
-| Code | Description
-| 400  | Bad Request
-| 401  | Unauthorized
-| 404  | Not Found
-| 500  | Internal Server Error
-|===
+== Create Order-Groups
 
-== Endpoints
-
-=== Order-Groups
-
-==== POST /order-groups
+----
+POST /order-groups
+----
 
 .Request Body:
 |===
@@ -61,7 +52,11 @@ Authorization: Bearer YOUR_API_TOKEN
 | updated_at  | string  | Timestamp indicating the last time the order group was updated.
 |===
 
-==== GET /order-groups/:group_id
+
+== Get Order-Groups
+----
+GET /order-groups/:group_id
+----
 
 .Path Parameters
 group_id::
@@ -79,9 +74,11 @@ group_id::
 }
 ----
 
-=== Delivery Orders
 
-==== POST /order-groups/:group_id/orders
+== Create Delivery Orders
+----
+POST /order-groups/:group_id/orders
+----
 
 .Path Parameters
 group_id::
@@ -105,7 +102,11 @@ group_id::
 }
 ----
 
-==== GET /order-groups/:group_id/orders/:id
+
+== Get Delivery Orders
+----
+GET /order-groups/:group_id/orders/:id
+----
 
 .Path Parameters
 group_id::
@@ -137,6 +138,7 @@ id::
 }
 ----
 
+
 == Callback for Delivery Status Updates
 
 The callback will be made to the `callback_url` provided in the POST request. The callback will include the following parameters:
@@ -155,6 +157,7 @@ The callback will be made to the `callback_url` provided in the POST request. Th
   "proof_of_delivery": "https://example.com/proofs/1234.jpg"
 }
 ----
+
 
 == Order Group Status
 
