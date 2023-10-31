@@ -65,9 +65,8 @@ Authorization: Bearer YOUR_API_TOKEN
 
 .Path Parameters
 group_id::
-+
--- Type: `int`
--- Description: ID of the order-group to retrieve
+  - Type: `int`
+  - Description: ID of the order-group to retrieve
 
 .Response Example
 [source,json]
@@ -86,9 +85,8 @@ group_id::
 
 .Path Parameters
 group_id::
-+
--- Type: `int`
--- Description: ID of the order-group to retrieve
+  - Type: `int`
+  - Description: ID of the order-group to retrieve
 
 .Request Parameters Table:
 |===
@@ -109,17 +107,15 @@ group_id::
 
 ==== GET /order-groups/:group_id/orders/:id
 
-.Path Parameters:
+.Path Parameters
 group_id::
-+
--- Type: `int`
--- Description: ID of the order-group to retrieve
+  - Type: `int`
+  - Description: ID of the order-group to retrieve
 id::
-+
--- Type: `int`
--- Description: ID of the specific delivery order within the order-group
+  - Type: `int`
+  - Description: ID of the specific delivery order within the order-group
 
-.Response Fields Table:
+.Response Fields Table
 |===
 | Field      | Type   | Description
 | id         | int    | Unique identifier for the specific delivery order.
