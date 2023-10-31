@@ -107,3 +107,71 @@ paths:
                   updated_at:
                     type: string
                     description: "Timestamp indicating the last time the order group was updated."
+
+  /order-groups/{group_id}/orders:
+    post:
+      summary: "Creates a new delivery order within a specific order-group."
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: "group_id"
+          in: "path"
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address:
+                  type: string
+                  description: "Delivery address."
+                status:
+                  type: string
+                  description: "Delivery status (e.g., 'Pending', 'Delivered')."
+      responses:
+        '200':
+          description: "Successfully created a new delivery order."
+
+  /order-groups/{group_id}/orders/{id}:
+    get:
+      summary: "Retrieves details of a specific delivery order within a given order-group."
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: "group_id"
+          in: "path"
+          required: true
+          schema:
+            type: integer
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Successfully retrieved the details of the specific delivery order."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: "Unique identifier for the delivery order."
+                  address:
+                    type: string
+                    description: "Delivery address."
+                  status:
+                    type: string
+                    description: "Delivery status."
+                  created_at:
+                    type: string
+                    description: "Timestamp indicating when the delivery order was created."
+                  updated_at:
+                    type: string
+                    description: "Timestamp indicating the last time the delivery order was updated."

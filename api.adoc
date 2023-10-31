@@ -146,7 +146,7 @@ Creates a new delivery order within a specific order-group.
 }
 ----
 
-==== GET /order-groups/:group_id/orders/:id
+==== get /order-groups/:group_id/orders/:id
 
 Retrieves details of a specific delivery order within a given order-group.
 
