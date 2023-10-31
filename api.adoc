@@ -220,3 +220,4 @@ The Location Object represents geographical coordinates, consisting of `longitud
   ** Latitude:
     - Type: `float`
     - Description: The latitude coordinate of the location
+wa
