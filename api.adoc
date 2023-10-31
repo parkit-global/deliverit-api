@@ -7,7 +7,6 @@
 
 This API allows you to manage delivery orders and their associated order-groups. Features include creating and retrieving both order-groups and individual delivery orders.
 
-
 == Base URL
 
 The base URL for the API is `http://external.deliveritmy.com`.
@@ -36,18 +35,12 @@ Authorization: Bearer YOUR_API_TOKEN
 
 ==== POST /order-groups
 
-Creates a new order group for delivery.
-
-.Request Body Parameters
-name::
-  - Type: `string`
-  - Description: The name or description of the order group.
-  - Required: Yes
-
-pickup_location::
-  - Type: `location`
-  - Description: The pickup location for the order group. See <<Location>>.
-  - Required: Yes
+.Request Body:
+|===
+| Name            | Type     | Description                                               | Required
+| name            | string   | The name or description of the order group.               | Yes
+| pickup_location | location | The pickup location for the order group. See <<Location>> | Yes
+|===
 
 .Request Example
 [source,json]
@@ -58,52 +51,23 @@ pickup_location::
 }
 ----
 
-.Response Fields
-id::
-  - Type: `int`
-  - Description: Unique identifier for the newly created order group.
-
-name::
-  - Type: `string`
-  - Description: The name or description of the order group.
-
-status::
-  - Type: `string`
-  - Description: Current status of the order group. See <<Order Group Status>>.
-
-created_at::
-  - Type: `string`
-  - Description: Timestamp indicating when the order group was created.
-
-updated_at::
-  - Type: `string`
-  - Description: Timestamp indicating the last time the order group was updated
-
-
-.Response Example
-[source,json]
-----
-{
-  "id": 4,
-  "name": "Afternoon Deliveries",
-  "pickup_location": "TBA",
-  "status": "OPEN",
-  "created_at": "2023-01-01T12:34:56Z",
-  "updated_at": "2023-01-02T12:34:56Z"
-}
-----
-
-
+.Response Body
+|===
+| Name        | Type    | Description
+| id          | int     | Unique identifier for the newly created order group.
+| name        | string  | The name or description of the order group.
+| status      | string  | Current status of the order group. See <<Order Group Status>>
+| created_at  | string  | Timestamp indicating when the order group was created.
+| updated_at  | string  | Timestamp indicating the last time the order group was updated.
+|===
 
 ==== GET /order-groups/:group_id
 
-Retrieves details of a specific order-group.
-
 .Path Parameters
-|===
-| Name      | Type  | Description
-| group_id  | int   | ID of the order-group to retrieve
-|===
+group_id::
++
+-- Type: `int`
+-- Description: ID of the order-group to retrieve
 
 .Response Example
 [source,json]
@@ -116,24 +80,21 @@ Retrieves details of a specific order-group.
 }
 ----
 
-
 === Delivery Orders
 
 ==== POST /order-groups/:group_id/orders
 
-Creates a new delivery order within a specific order-group.
-
 .Path Parameters
-|===
-| Name  | Type      | Description
-| group_id    | string    | ID of the order-group
-|===
+group_id::
++
+-- Type: `int`
+-- Description: ID of the order-group to retrieve
 
-.Request Parameters
+.Request Parameters Table:
 |===
-| Name     | Type   | Description
-| address  | string | Delivery address
-| status   | string | Delivery status (e.g., "Pending", "Delivered")
+| Name    | Type   | Description
+| address | string | Delivery address
+| status  | string | Delivery status (e.g., "Pending", "Delivered")
 |===
 
 .Response Example
@@ -146,15 +107,26 @@ Creates a new delivery order within a specific order-group.
 }
 ----
 
-==== get /order-groups/:group_id/orders/:id
+==== GET /order-groups/:group_id/orders/:id
 
-Retrieves details of a specific delivery order within a given order-group.
+.Path Parameters:
+group_id::
++
+-- Type: `int`
+-- Description: ID of the order-group to retrieve
+id::
++
+-- Type: `int`
+-- Description: ID of the specific delivery order within the order-group
 
-.Path Parameters
+.Response Fields Table:
 |===
-| Name      | Type  | Description
-| group_id  | int   | ID of the order-group
-| id        | int   | ID of the specific delivery order within the order-group
+| Field      | Type   | Description
+| id         | int    | Unique identifier for the specific delivery order.
+| address    | string | The address for the delivery.
+| status     | string | Current status of the delivery order.
+| created_at | string | Timestamp indicating when the delivery order was created.
+| updated_at | string | Timestamp indicating the last time the delivery order was updated.
 |===
 
 .Response Example
@@ -168,7 +140,6 @@ Retrieves details of a specific delivery order within a given order-group.
   "updated_at": "2023-01-02T12:34:56Z"
 }
 ----
-
 
 == Callback for Delivery Status Updates
 
@@ -189,7 +160,6 @@ The callback will be made to the `callback_url` provided in the POST request. Th
 }
 ----
 
-
 == Order Group Status
 
 An order group undergoes a series of stages, each represented by a distinct status. Though the status is a string, it can only assume the following specific values:
@@ -197,7 +167,6 @@ An order group undergoes a series of stages, each represented by a distinct stat
 .Status and Descriptions
 |===
 | Status          | Description
-
 | OPEN            | Initial stage with draft versions of pickup and drop-off tasks.
 | CONFIRMED       | Pickup and drop-off tasks are finalized and forwarded to OnFleet for driver allocation.
 | ASSIGNED        | A driver has been allocated for the pickup and drop-off tasks in the order group.
@@ -213,11 +182,9 @@ An order group undergoes a series of stages, each represented by a distinct stat
 
 The Location Object represents geographical coordinates, consisting of `longitude` and `latitude`.
 
-* Location Object Properties:
-  ** Longitude:
-    - Type: `float`
-    - Description: The longitude coordinate of the location
-  ** Latitude:
-    - Type: `float`
-    - Description: The latitude coordinate of the location
-wa
+.Location Properties
+|===
+| Name       | Type    | Description
+| longitude  | double  | The longitude coordinate of the location
+| latitude   | double  | The latitude coordinate of the location
+|===
