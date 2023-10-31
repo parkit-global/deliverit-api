@@ -9,7 +9,7 @@ This API allows you to manage delivery orders and associated order-groups. Featu
 
 == Base URL
 
-The base URL for the API is `http://api.example.com`.
+The base URL for the API is `http://api.deliveritmy.com`.
 
 == Authentication
 
@@ -34,29 +34,6 @@ Authorization: Bearer YOUR_API_TOKEN
 
 === Order-Groups
 
-==== GET /order-groups
-
-Retrieves a list of order-groups for delivery.
-
-.Request Parameters
-|===
-| Name    | Type   | Description
-
-| limit   | int    | Maximum number of order-groups to retrieve (Optional)
-| offset  | int    | Number of order-groups to skip (Optional)
-|===
-
-.Response Example
-[source,json]
-----
-{
-  "data": [
-    {"id": 1, "name": "Morning Deliveries"},
-    {"id": 2, "name": "Afternoon Deliveries"}
-  ]
-}
-----
-
 ==== POST /order-groups
 
 Creates a new order-group for delivery.
@@ -77,31 +54,32 @@ Creates a new order-group for delivery.
 }
 ----
 
-=== Delivery Orders
+==== GET /order-groups/:group_id
 
-==== GET /order-groups/:id/orders
-
-Retrieves a list of delivery orders within a specific order-group.
+Retrieves details of a specific order-group.
 
 .Path Parameters
 |===
-| Name  | Type   | Description
+| Name      | Type  | Description
 
-| id    | int    | ID of the order-group
+| group_id  | int   | ID of the order-group to retrieve
 |===
 
 .Response Example
 [source,json]
 ----
 {
-  "data": [
-    {"id": 1, "address": "123 Main St", "status": "Pending"},
-    {"id": 2, "address": "456 Elm St", "status": "Delivered"}
-  ]
+  "id": 1,
+  "name": "Morning Deliveries",
+  "created_at": "2023-01-01T12:34:56Z",
+  "updated_at": "2023-01-02T12:34:56Z"
 }
 ----
 
-==== POST /order-groups/:id/orders
+
+=== Delivery Orders
+
+==== POST /order-groups/:group_id/orders
 
 Creates a new delivery order within a specific order-group.
 
@@ -109,7 +87,7 @@ Creates a new delivery order within a specific order-group.
 |===
 | Name  | Type      | Description
 
-| id    | string    | ID of the order-group
+| group_id    | string    | ID of the order-group
 |===
 
 .Request Parameters
@@ -127,5 +105,29 @@ Creates a new delivery order within a specific order-group.
   "id": 3,
   "address": "789 Oak St",
   "status": "Pending"
+}
+----
+
+==== GET /order-groups/:group_id/orders/:id
+
+Retrieves details of a specific delivery order within a given order-group.
+
+.Path Parameters
+|===
+| Name      | Type  | Description
+
+| group_id  | int   | ID of the order-group
+| id        | int   | ID of the specific delivery order within the order-group
+|===
+
+.Response Example
+[source,json]
+----
+{
+  "id": 1,
+  "address": "123 Main St",
+  "status": "Pending",
+  "created_at": "2023-01-01T12:34:56Z",
+  "updated_at": "2023-01-02T12:34:56Z"
 }
 ----
