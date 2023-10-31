@@ -1,0 +1,131 @@
+= DeliverIt API Documentation
+:toc: right
+:toclevels: 2
+:version: 1.0
+
+== Overview
+
+This API allows you to manage delivery orders and associated order-groups. Features include creating, updating, deleting, and retrieving both order-groups and individual delivery orders.
+
+== Base URL
+
+The base URL for the API is `http://api.example.com`.
+
+== Authentication
+
+Use your API token in the `Authorization` header like this:
+
+----
+Authorization: Bearer YOUR_API_TOKEN
+----
+
+== Error Codes
+
+|===
+| Code | Description
+
+| 400  | Bad Request
+| 401  | Unauthorized
+| 404  | Not Found
+| 500  | Internal Server Error
+|===
+
+== Endpoints
+
+=== Order-Groups
+
+==== GET /order-groups
+
+Retrieves a list of order-groups for delivery.
+
+.Request Parameters
+|===
+| Name    | Type   | Description
+
+| limit   | int    | Maximum number of order-groups to retrieve (Optional)
+| offset  | int    | Number of order-groups to skip (Optional)
+|===
+
+.Response Example
+[source,json]
+----
+{
+  "data": [
+    {"id": 1, "name": "Morning Deliveries"},
+    {"id": 2, "name": "Afternoon Deliveries"}
+  ]
+}
+----
+
+==== POST /order-groups
+
+Creates a new order-group for delivery.
+
+.Request Parameters
+|===
+| Name  | Type   | Description
+
+| name  | string | The name of the order-group
+|===
+
+.Response Example
+[source,json]
+----
+{
+  "id": 3,
+  "name": "Evening Deliveries"
+}
+----
+
+=== Delivery Orders
+
+==== GET /order-groups/:id/orders
+
+Retrieves a list of delivery orders within a specific order-group.
+
+.Path Parameters
+|===
+| Name  | Type   | Description
+
+| id    | int    | ID of the order-group
+|===
+
+.Response Example
+[source,json]
+----
+{
+  "data": [
+    {"id": 1, "address": "123 Main St", "status": "Pending"},
+    {"id": 2, "address": "456 Elm St", "status": "Delivered"}
+  ]
+}
+----
+
+==== POST /order-groups/:id/orders
+
+Creates a new delivery order within a specific order-group.
+
+.Path Parameters
+|===
+| Name  | Type      | Description
+
+| id    | string    | ID of the order-group
+|===
+
+.Request Parameters
+|===
+| Name     | Type   | Description
+
+| address  | string | Delivery address
+| status   | string | Delivery status (e.g., "Pending", "Delivered")
+|===
+
+.Response Example
+[source,json]
+----
+{
+  "id": 3,
+  "address": "789 Oak St",
+  "status": "Pending"
+}
+----
