@@ -39,11 +39,15 @@ Authorization: Bearer YOUR_API_TOKEN
 Creates a new order group for delivery.
 
 .Request Body Parameters
-|===
-| Name            | Type     | Description                                               | Required
-| name            | string   | The name or description of the order group.               | Yes
-| pickup_location | location | The pickup location for the order group. See <<Location>> | Yes
-|===
+name::
+  - Type: `string`
+  - Description: The name or description of the order group.
+  - Required: Yes
+
+pickup_location::
+  - Type: `location`
+  - Description: The pickup location for the order group. See <<Location>>.
+  - Required: Yes
 
 .Request Example
 [source,json]
@@ -55,14 +59,25 @@ Creates a new order group for delivery.
 ----
 
 .Response Fields
-|===
-| Name        | Type    | Description
-| id          | int     | Unique identifier for the newly created order group.
-| name        | string  | The name or description of the order group.
-| status      | string  | Current status of the order group. See <<Order Group Status>>
-| created_at  | string  | Timestamp indicating when the order group was created.
-| updated_at  | string  | Timestamp indicating the last time the order group was updated.
-|===
+id::
+  - Type: `int`
+  - Description: Unique identifier for the newly created order group.
+
+name::
+  - Type: `string`
+  - Description: The name or description of the order group.
+
+status::
+  - Type: `string`
+  - Description: Current status of the order group. See <<Order Group Status>>.
+
+created_at::
+  - Type: `string`
+  - Description: Timestamp indicating when the order group was created.
+
+updated_at::
+  - Type: `string`
+  - Description: Timestamp indicating the last time the order group was updated
 
 
 .Response Example
@@ -77,6 +92,7 @@ Creates a new order group for delivery.
   "updated_at": "2023-01-02T12:34:56Z"
 }
 ----
+
 
 
 ==== GET /order-groups/:group_id
@@ -193,13 +209,14 @@ An order group undergoes a series of stages, each represented by a distinct stat
 |===
 
 
-=== Location 
+== Location 
 
 The Location Object represents geographical coordinates, consisting of `longitude` and `latitude`.
 
-.Location Properties
-|===
-| Name       | Type    | Description
-| longitude  | double  | The longitude coordinate of the location
-| latitude   | double  | The latitude coordinate of the location
-|===
+* Location Object Properties:
+  ** Longitude:
+    - Type: `float`
+    - Description: The longitude coordinate of the location
+  ** Latitude:
+    - Type: `float`
+    - Description: The latitude coordinate of the location
