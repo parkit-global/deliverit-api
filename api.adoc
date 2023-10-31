@@ -37,23 +37,51 @@ Authorization: Bearer YOUR_API_TOKEN
 
 ==== POST /order-groups
 
-Creates a new order-group for delivery.
+Creates a new order group for delivery.
 
-.Request Parameters
+.Request Body Parameters
 |===
-| Name  | Type   | Description
+| Name         | Type    | Description                                                  | Required
 
-| name  | string | The name of the order-group
+| name         | string  | The name or description of the order group.                  | Yes
+| pickup_location | location | The pickup location for the order group.                  | Yes
 |===
+
+.Request Example
+[source,json]
+----
+{
+  "name": "Afternoon Deliveries",
+  "pickup_location": "TBA"
+}
+----
+
+.Response Fields
+|===
+| Name        | Type    | Description
+
+| id          | int     | Unique identifier for the newly created order group.
+| name        | string  | The name or description of the order group.
+| status      | string  | Current status of the order group. See <<Order Group Status (`OrderGroupStatus`)>>
+
+| created_at  | string  | Timestamp indicating when the order group was created.
+| updated_at  | string  | Timestamp indicating the last time the order group was updated.
+|===
+
 
 .Response Example
 [source,json]
 ----
 {
-  "id": 3,
-  "name": "Evening Deliveries"
+  "id": 4,
+  "name": "Afternoon Deliveries",
+  "pickup_location": "TBA",
+  "status": "OPEN",
+  "created_at": "2023-01-01T12:34:56Z",
+  "updated_at": "2023-01-02T12:34:56Z"
 }
 ----
+
 
 ==== GET /order-groups/:group_id
 
@@ -153,3 +181,23 @@ The callback will be made to the `callback_url` provided in the POST request. Th
   "proof_of_delivery": "https://example.com/proofs/1234.jpg"
 }
 ----
+
+
+== Order Group Status
+
+An order group undergoes a series of stages, each represented by a distinct status. Though the status is a string, it can only assume the following specific values:
+
+.Status and Descriptions
+|===
+| Status          | Description
+
+| OPEN            | Initial stage with draft versions of pickup and drop-off tasks.
+| CONFIRMED       | Pickup and drop-off tasks are finalized and forwarded to OnFleet for driver allocation.
+| ASSIGNED        | A driver has been allocated for the pickup and drop-off tasks in the order group.
+| IN_TRANSIT      | The driver has initiated the pickup and drop-off tasks; the orders are currently in transit.
+| SUCCESS         | All tasks related to pickup and drop-off within the order group have been successfully completed.
+| PARTIAL_SUCCESS | Mixed results for the pickup and drop-off tasks within the order group; some succeeded while others failed.
+| FAILED          | All tasks related to pickup and drop-off within the order group were unsuccessful.
+| CANCELLED       | All tasks related to pickup and drop-off within the order group have been cancelled.
+|===
+
