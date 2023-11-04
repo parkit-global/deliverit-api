@@ -2,8 +2,6 @@ name: Generate HTML and Create Release
 
 on:
   push:
-    paths:
-      - '**/*.adoc'
     branches:
       - draft
   workflow_dispatch:
