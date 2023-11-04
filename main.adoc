@@ -22,10 +22,10 @@ Authorization: Bearer YOUR_API_TOKEN
 ----
 
 == Endpoints
-include::api.adoc[]
+include::api.adoc
 
 == CallBack
-include::callback.adoc[]
+include::callback.adoc
 
 == Model
-include::model.adoc[]
+include::model.adoc
