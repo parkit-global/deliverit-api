@@ -2,9 +2,15 @@ name: Generate HTML and Create Release
 
 on:
   push:
+    paths:
+      - '*.adoc'
     branches:
       - draft
   workflow_dispatch:
+
+permissions:
+  contents: write
+  actions: write
 
 jobs:
   release:
@@ -20,27 +26,21 @@ jobs:
       - name: Generate HTML
         run: asciidoctor -o main.html main.adoc
 
-      - name: Get the version
-        id: get_version
-        run: echo ::set-output name=VERSION::$(date +'%Y%m%d%H%M%S')
-      
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.get_version.outputs.VERSION }}
-          release_name: Release ${{ steps.get_version.outputs.VERSION }}
-          draft: false
-          prerelease: false
+      - name: Delete the 'latest' tag
+        run: git push origin --delete latest || true
 
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
+      - name: Create the 'latest' tag
+        run: git tag -fa latest -m "Update latest release" && git push origin latest
+
+      - name: Update Release
+        id: update_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: latest
+          name: Latest Release
+          body: The latest version of the HTML
+          prerelease: false
+          files: main.html
+          allow_updates: true 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./main.html
-          asset_name: main.html
-          asset_content_type: text/html
