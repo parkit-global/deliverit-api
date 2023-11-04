@@ -5,7 +5,7 @@ on:
     paths:
       - '*.adoc'
     branches:
-      - draft
+      - master
   workflow_dispatch:
 
 permissions:
