@@ -1,26 +1,4 @@
-= DeliverIt API Documentation
-:toc: right
-:toclevels: 2
-:version: 1.0
-
-== Overview
-
-This API allows you to manage delivery orders and their associated order-groups. Features include creating and retrieving both order-groups and individual delivery orders.
-
-== Base URL
-
-The base URL for the API is `http://external.deliveritmy.com`.
-
-== Authentication
-
-Use your API token in the `Authorization` header like this:
-
-----
-Authorization: Bearer YOUR_API_TOKEN
-----
-
-
-== Create Order-Groups
+=== Create Order-Groups
 
 Creates a new order group for delivery.
 
@@ -74,7 +52,7 @@ POST /order-groups
 }
 
 
-== Get Order-Groups
+=== Get Order-Groups
 
 Retrieves details of a specific order-group.
 
@@ -104,7 +82,7 @@ GET /order-groups/:group_id
 }
 
 
-== Create Delivery Orders
+=== Create Delivery Orders
 
 Creates a new delivery order within a specific order-group.
 
@@ -137,7 +115,7 @@ POST /order-groups/:group_id/orders
 ----
 
 
-== Get Delivery Orders
+=== Get Delivery Orders
 
 Retrieves details of a specific delivery order within a given order-group.
 
@@ -174,52 +152,3 @@ GET /order-groups/:group_id/orders/:id
 }
 ----
 
-
-== Callback for Delivery Status Updates
-
-The callback will be made to the `callback_url` provided in the POST request. The callback will include the following parameters:
-
-|===
-| Name               | Type   | Description
-| status             | string | Delivery status (e.g., "Success", "Failed")
-| proof_of_delivery  | string | A URL or identifier for proof of delivery (e.g., a photo, digital signature)
-|===
-
-.Callback Example
-[source,json]
-----
-{
-  "status": "Success",
-  "proof_of_delivery": "https://example.com/proofs/1234.jpg"
-}
-----
-
-
-== Order Group Status
-
-An order group undergoes a series of stages, each represented by a distinct status. Though the status is a string, it can only assume the following specific values:
-
-.Status and Descriptions
-|===
-| Status          | Description
-| OPEN            | Initial stage with draft versions of pickup and drop-off tasks.
-| CONFIRMED       | Pickup and drop-off tasks are finalized and forwarded to OnFleet for driver allocation.
-| ASSIGNED        | A driver has been allocated for the pickup and drop-off tasks in the order group.
-| IN_TRANSIT      | The driver has initiated the pickup and drop-off tasks; the orders are currently in transit.
-| SUCCESS         | All tasks related to pickup and drop-off within the order group have been successfully completed.
-| PARTIAL_SUCCESS | Mixed results for the pickup and drop-off tasks within the order group; some succeeded while others failed.
-| FAILED          | All tasks related to pickup and drop-off within the order group were unsuccessful.
-| CANCELLED       | All tasks related to pickup and drop-off within the order group have been cancelled.
-|===
-
-
-== Location 
-
-The Location Object represents geographical coordinates, consisting of `longitude` and `latitude`.
-
-.Location Properties
-|===
-| Name       | Type    | Description
-| longitude  | double  | The longitude coordinate of the location
-| latitude   | double  | The latitude coordinate of the location
-|===

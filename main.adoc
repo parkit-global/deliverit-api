@@ -1,0 +1,30 @@
+= DeliverIt API Documentation
+:toc: left
+// :toclevels: 2
+:sectnums:
+:version: 1.0
+
+== Overview
+
+This API allows you to manage delivery orders and their associated order-groups. Features include creating and retrieving both order-groups and individual delivery orders.
+
+== Base URL
+
+The base URL for the API is `http://external.deliveritmy.com`.
+
+== Authentication
+
+Use your API token in the `Authorization` header like this:
+
+----
+Authorization: Bearer YOUR_API_TOKEN
+----
+
+== Endpoints
+include::api.adoc[]
+
+== CallBack
+include::callback.adoc[]
+
+== Model
+include::model.adoc[]
