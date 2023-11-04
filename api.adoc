@@ -83,9 +83,10 @@ GET /order-groups/:group_id
 ----
 
 .Path Parameters
-group_id::
-  - Type: `int`
-  - Description: ID of the order-group to retrieve
+|===
+| Name            | Type     | Description                                               | Required
+| group_id        | string   | ID of the order-group to retrieve                         | Yes
+|===
 
 .Response Example
 [source,json]
@@ -107,14 +108,16 @@ group_id::
 
 Creates a new delivery order within a specific order-group.
 
+
 ----
 POST /order-groups/:group_id/orders
 ----
 
 .Path Parameters
-group_id::
-  - Type: `int`
-  - Description: ID of the order-group to retrieve
+|===
+| Name            | Type     | Description                                                      | Required
+| group_id        | string   | ID of the order-group in which the delivery order is attached to | Yes
+|===
 
 .Request Parameters Table:
 |===
@@ -143,12 +146,11 @@ GET /order-groups/:group_id/orders/:id
 ----
 
 .Path Parameters
-group_id::
-  - Type: `int`
-  - Description: ID of the order-group to retrieve
-id::
-  - Type: `int`
-  - Description: ID of the specific delivery order within the order-group
+|===
+| Name            | Type     | Description                                                      | Required
+| group_id        | string   | ID of the order-group in which the delivery order is attached to | Yes
+| id              | string   | ID of the specific delivery order within the order-group         | Yes
+|===
 
 .Response Fields Table
 |===
