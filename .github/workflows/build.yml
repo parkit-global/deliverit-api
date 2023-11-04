@@ -26,6 +26,11 @@ jobs:
       - name: Generate HTML
         run: asciidoctor -o main.html main.adoc
 
+      - name: Set up Git identity
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
       - name: Delete the 'latest' tag
         run: git push origin --delete latest || true
 
