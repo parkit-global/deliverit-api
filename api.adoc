@@ -10,12 +10,12 @@ POST /order-groups
 |===
 | Name            | Type         | Description                                 | Required
 | pickUpLocation | <<Location>> | The pickup location for the order group.    | Yes
-| pickUpContactNumber | String   | Pickup task recipient contact number. Must start with “+6” and without any space and dash. E.g. +601000000001 | Yes
-| pickUpDateTime | String | Pick up datetime | Yes
-| pickUpPersonName | String | Pickup task recipient name | No
-| deliveryMethod | String | Preferred delivery method - CAR or MOTOR. | No
-| halal | Boolean | Is the deliverable halal? | No
-| noteToDriver | String | Extra note to driver | No
+| pickUpContactNumber | String   | Pickup task recipient contact number. Must start with “+6” and without any space and dash. E.g. +601000000001. | Yes
+| pickUpDateTime | String | Pick up datetime. | Yes
+| pickUpPersonName | String | Pickup task recipient name. | No
+| deliveryMethod | <<DeliveryMethod>> | Preferred delivery method. | No
+| halal | Boolean | Is the deliverable halal or not. | No
+| noteToDriver | String | Extra note to driver for pick up. | No
 |===
 
 .Request Example
@@ -47,6 +47,17 @@ POST /order-groups
 | Name        | Type                   | Description
 | id          | String                    | Unique identifier for the newly created order group.
 | status      | <<Order Group Status>> | Current status of the order group.
+| pickUpLocation | <<Location>> | The pickup location for the order group.
+| pickUpContactNumber | String   | Pickup task recipient contact number. Must start with “+6” and without any space and dash. E.g. +601000000001.
+| pickUpDateTime | String | Pick up datetime.
+| pickUpPersonName | String | Pickup task recipient name.
+| deliveryMethod | <<DeliveryMethod>> | Preferred delivery method.
+| halal | Boolean | Is the deliverable halal?
+| noteToDriver | String | Extra note to driver for pick up.
+| paid | boolean | Order group had paid or not.
+| hadPickedUp | boolean | Pick up task had completed or not.
+| assigned | boolean | Pick up task had assigned to worker or not. 
+| orders | list<<Order>> | List of drop off details for this order group pick up.
 |===
 
 .Response Example
@@ -54,7 +65,6 @@ POST /order-groups
 ----
 {
     "id": "6547544cbe3e2e566799660e",
-    "version": 0,
     "orders": [],
     "status": "OPEN",
     "pickUpPersonName": "Pickup Tester",
@@ -74,7 +84,6 @@ POST /order-groups
     "pickUpDateTime": "2023-11-09T08:00:00Z",
     "deliveryMethod": "MOTOR",
     "halal": false,
-    "parkIt": false,
     "paid": false,
     "hadPickedUp": false,
     "assigned": false
@@ -95,64 +104,79 @@ GET /order-groups/:group_id
 | group_id        | string   | ID of the order-group to retrieve | Yes
 |===
 
+.Response Body
+|===
+| Name        | Type                   | Description
+| id          | String                    | Unique identifier for the newly created order group.
+| status      | <<Order Group Status>> | Current status of the order group.
+| pickUpLocation | <<Location>> | The pickup location for the order group.
+| pickUpContactNumber | String   | Pickup task recipient contact number. Must start with “+6” and without any space and dash. E.g. +601000000001.
+| pickUpDateTime | String | Pick up datetime.
+| pickUpPersonName | String | Pickup task recipient name.
+| deliveryMethod | <<DeliveryMethod>> | Preferred delivery method.
+| halal | Boolean | Is the deliverable halal?
+| noteToDriver | String | Extra note to driver for pick up.
+| paid | boolean | Order group had paid or not.
+| hadPickedUp | boolean | Pick up task had completed or not.
+| assigned | boolean | Pick up task had assigned to worker or not. 
+| orders | list<<Order>> | List of drop off details for this order group pick up.
+|===
+
 .Response Example
 [source,json]
 ----
 {
-    "id": "6547544cbe3e2e566799660e",
-    "version": 5,
-    "orders": [
-        {
-            "id": "6547571bbe3e2e566799660f",
-            "version": 1,
-            "ordinal": 0,
-            "status": "OPEN",
-            "recipientName": "Dropoff Tester1",
-            "recipientPhone": "+60123456788",
-            "deliverDateTime": "2023-11-09T09:15:00Z",
-            "dropOffLocation": {
-                "coordinate": {
-                    "longitude": 101.6168101,
-                    "latitude": 3.064785
-                },
-                "address": "Taylor's University Lakeside Campus, 1, Jln Taylors, 47500 Subang Jaya, Selangor, Malaysia",
-                "unitNumber": "",
-                "city": "Subang Jaya",
-                "state": "Selangor",
-                "postalCode": "47500",
-                "country": "Malaysia"
-            },
-            "deliveryRange": 5581,
-            "deliveryFee": 906,
-            "doorToDoorFee": 0,
-            "currency": "MYR",
-            "doorToDoor": false,
-            "hadDelivered": false,
-            "assigned": false
-        }
-    ],
-    "status": "OPEN",
-    "pickUpPersonName": "Pickup Tester",
-    "pickUpContactNumber": "+60123456789",
-    "pickUpLocation": {
+  "id": "6547544cbe3e2e566799660e",
+  "orders": [
+    {
+      "id": "6547571bbe3e2e566799660f",
+      "ordinal": 0,
+      "status": "OPEN",
+      "recipientName": "Dropoff Tester1",
+      "recipientPhone": "+60123456788",
+      "deliverDateTime": "2023-11-09T09:15:00Z",
+      "dropOffLocation": {
         "coordinate": {
-            "longitude": 101.6024829,
-            "latitude": 3.0683743
+          "longitude": 101.6168101,
+          "latitude": 3.064785
         },
-        "address": "Bandar Sunway, Bandar Sunway, 47500 Petaling Jaya, Selangor, Malaysia",
-        "unitNumber": "A1",
-        "city": "Petaling Jaya",
+        "address": "Taylor's University Lakeside Campus, 1, Jln Taylors, 47500 Subang Jaya, Selangor, Malaysia",
+        "unitNumber": "",
+        "city": "Subang Jaya",
         "state": "Selangor",
         "postalCode": "47500",
         "country": "Malaysia"
+      },
+      "deliveryRange": 5581,
+      "deliveryFee": 906,
+      "doorToDoorFee": 0,
+      "currency": "MYR",
+      "doorToDoor": false,
+      "hadDelivered": false,
+      "assigned": false
+    }
+  ],
+  "status": "OPEN",
+  "pickUpPersonName": "Pickup Tester",
+  "pickUpContactNumber": "+60123456789",
+  "pickUpLocation": {
+    "coordinate": {
+      "longitude": 101.6024829,
+      "latitude": 3.0683743
     },
-    "pickUpDateTime": "2023-11-09T08:00:00Z",
-    "deliveryMethod": "MOTOR",
-    "halal": false,
-    "parkIt": false,
-    "paid": false,
-    "hadPickedUp": false,
-    "assigned": false
+    "address": "Bandar Sunway, Bandar Sunway, 47500 Petaling Jaya, Selangor, Malaysia",
+    "unitNumber": "A1",
+    "city": "Petaling Jaya",
+    "state": "Selangor",
+    "postalCode": "47500",
+    "country": "Malaysia"
+  },
+  "pickUpDateTime": "2023-11-09T08:00:00Z",
+  "deliveryMethod": "MOTOR",
+  "halal": false,
+  "paid": false,
+  "hadPickedUp": false,
+  "assigned": false
 }
 ----
 
@@ -173,7 +197,7 @@ POST /order-groups/:group_id/confirm
 .Request Body
 |===
 | Name            | Type         | Description                                 | Required
-| voucherId | string |     | No
+| voucherId | string | Voucher id apply to order group payment. | No
 |===
 
 .Request Example
@@ -184,16 +208,33 @@ POST /order-groups/:group_id/confirm
 }
 ----
 
+.Response Body
+|===
+| Name        | Type                   | Description
+| id          | String                    | Unique identifier for the newly created order group.
+| status      | <<Order Group Status>> | Current status of the order group.
+| pickUpLocation | <<Location>> | The pickup location for the order group.
+| pickUpContactNumber | String   | Pickup task recipient contact number. Must start with “+6” and without any space and dash. E.g. +601000000001.
+| pickUpDateTime | String | Pick up datetime.
+| pickUpPersonName | String | Pickup task recipient name.
+| deliveryMethod | <<DeliveryMethod>> | Preferred delivery method.
+| halal | Boolean | Is the deliverable halal?
+| noteToDriver | String | Extra note to driver for pick up.
+| paid | boolean | Order group had paid or not.
+| hadPickedUp | boolean | Pick up task had completed or not.
+| assigned | boolean | Pick up task had assigned to worker or not. 
+| orders | list<<Order>> | List of drop off details for this order group pick up.
+| trackingLink | string | Tracking URL for delivery process. 
+|===
+
 .Response Example
 [source,json]
 ----
 {
   "id": "6547544cbe3e2e566799660e",
-  "version": 7,
   "orders": [
     {
       "id": "6547571bbe3e2e566799660f",
-      "version": 2,
       "ordinal": 0,
       "status": "PROCESSING",
       "recipientName": "Dropoff Tester1",
@@ -241,15 +282,9 @@ POST /order-groups/:group_id/confirm
   "pickUpDateTime": "2023-11-09T08:00:00Z",
   "deliveryMethod": "MOTOR",
   "halal": false,
-  "parkIt": false,
   "paid": false,
-  "paymentId": "65475b60a8965a13c5200f59",
-  "walletId": "63d93203c1f5cddd9554b1fd",
-  "invoiceTitle": "DeliverIt Invoice",
-  "pickUpJobId": "W8h~S3qvsWhhJv15yMt9oHmM",
   "hadPickedUp": false,
   "trackingLink": "https://onf.lt/4130b192ed",
-  "deliveryPlatform": "ONFLEET",
   "assigned": false
 }
 ----
@@ -269,16 +304,33 @@ POST /order-groups/:group_id/cancel
 | group_id        | string   | ID of the order-group to retrieve | Yes
 |===
 
+.Response Body
+|===
+| Name        | Type                   | Description
+| id          | String                    | Unique identifier for the newly created order group.
+| status      | <<Order Group Status>> | Current status of the order group.
+| pickUpLocation | <<Location>> | The pickup location for the order group.
+| pickUpContactNumber | String   | Pickup task recipient contact number. Must start with “+6” and without any space and dash. E.g. +601000000001.
+| pickUpDateTime | String | Pick up datetime.
+| pickUpPersonName | String | Pickup task recipient name.
+| deliveryMethod | <<DeliveryMethod>> | Preferred delivery method.
+| halal | Boolean | Is the deliverable halal?
+| noteToDriver | String | Extra note to driver for pick up.
+| paid | boolean | Order group had paid or not.
+| hadPickedUp | boolean | Pick up task had completed or not.
+| assigned | boolean | Pick up task had assigned to worker or not. 
+| orders | list<<Order>> | List of drop off details for this order group pick up.
+| trackingLink | string | Tracking URL for delivery process. 
+|===
+
 .Response Example
 [source,json]
 ----
 {
   "id": "6547544cbe3e2e566799660e",
-  "version": 8,
   "orders": [
     {
       "id": "6547571bbe3e2e566799660f",
-      "version": 3,
       "ordinal": 0,
       "status": "CANCELLED",
       "recipientName": "Dropoff Tester1",
@@ -326,15 +378,9 @@ POST /order-groups/:group_id/cancel
   "pickUpDateTime": "2023-11-09T08:00:00Z",
   "deliveryMethod": "MOTOR",
   "halal": false,
-  "parkIt": false,
   "paid": false,
-  "paymentId": "65475b60a8965a13c5200f59",
-  "walletId": "63d93203c1f5cddd9554b1fd",
-  "invoiceTitle": "DeliverIt Invoice",
-  "pickUpJobId": "W8h~S3qvsWhhJv15yMt9oHmM",
   "hadPickedUp": false,
   "trackingLink": "https://onf.lt/4130b192ed",
-  "deliveryPlatform": "ONFLEET",
   "assigned": false
 }
 ----
@@ -358,14 +404,14 @@ POST /order-groups/:group_id/orders
 .Request Parameters Table:
 |===
 | Name    | Type   | Description
-| ordinal | int | ordering of the order in order group
-| recipientName | string | 
-| recipientPhone | string |
-| product | string |
-| deliverDateTime | string | 
-| dropOffLocation | <<Location>> | Delivery address
-| noteToDriver | string | 
-
+| ordinal | int | Sequence number of drop-off tasks. Start from zero.
+| recipientName | string | Drop-off task recipient name.
+| recipientPhone | string | Drop-off task recipient contact number. Must start with “+6” and without any space and dash. E.g. +601000000001.
+| product | string | Name of the products.
+| deliverDateTime | string | Drop-off task expected arrival date time.
+| dropOffLocation | <<Location>> | Drop-off task location.
+| noteToDriver | string | Extra note for driver for order. 
+| doorToDoor | boolean | Whether deliver door to door. Extra charges will incur to order group placement.
 |===
 
 .Resquest Example
@@ -392,12 +438,29 @@ POST /order-groups/:group_id/orders
 }
 ----
 
+.Response Body
+|===
+| Name    | Type   | Description
+| ordinal | int | Sequence number of drop-off tasks. Start from zero.
+| recipientName | string | Drop-off task recipient name.
+| recipientPhone | string | Drop-off task recipient contact number. Must start with “+6” and without any space and dash. E.g. +601000000001.
+| product | string | Name of the products.
+| deliverDateTime | string | Drop-off task expected arrival date time.
+| dropOffLocation | <<Location>> | Drop-off task location.
+| noteToDriver | string | Extra note for driver for order. 
+| doorToDoor | boolean | Whether deliver door to door. Extra charges will incur to order group placement.
+| deliveryRange | string | Delivery distance from previous point in meter.
+| deliveryFee | string | Delivery fee in cent.
+| doorToDoorFee | int | Door to door charge amount.
+| hadDelivered | boolean | Drop off had delivered or not.
+| assigned | boolean | Drop off task had assigned to any driver or not.
+|===
+
 .Response Example
 [source,json]
 ----
 {
   "id": "6547571bbe3e2e566799660f",
-  "version": 0,
   "ordinal": 0,
   "status": "OPEN",
   "recipientName": "Dropoff Tester1",
@@ -444,20 +507,19 @@ GET /order-groups/:group_id/orders/:id
 .Response Fields Table
 |===
 | Field      | Type   | Description
-| id         | int    | Unique identifier for the specific delivery order.
-| ordinal | int | ordering of the order in order group
-| recipientName | string | 
-| recipientPhone | string |
-| product | string |
-| deliverDateTime | string | 
-| dropOffLocation | <<Location>> | Delivery address
-| noteToDriver | string | 
-| deliveryRange | string | delivery distance from previous point in meter
-| deliveryFee | string | delivery fee in cent
-| doorToDoorFee | int | door to door charge amount
-| doorToDoor | boolean | require door to door or not 
-| hadDelivered | boolean | had delivered or not
-| assigned | boolean | assigned to any driver or not
+| ordinal | int | Sequence number of drop-off tasks. Start from zero.
+| recipientName | string | Drop-off task recipient name.
+| recipientPhone | string | Drop-off task recipient contact number. Must start with “+6” and without any space and dash. E.g. +601000000001.
+| product | string | Name of the products.
+| deliverDateTime | string | Drop-off task expected arrival date time.
+| dropOffLocation | <<Location>> | Drop-off task location.
+| noteToDriver | string | Extra note for driver for order. 
+| doorToDoor | boolean | Whether deliver door to door. Extra charges will incur to order group placement.
+| deliveryRange | string | Delivery distance from previous point in meter.
+| deliveryFee | string | Delivery fee in cent.
+| doorToDoorFee | int | Door to door charge amount.
+| hadDelivered | boolean | Drop off had delivered or not.
+| assigned | boolean | Drop off task had assigned to any driver or not.
 |===
 
 .Response Example

@@ -16,14 +16,53 @@ An order group undergoes a series of stages, each represented by a distinct stat
 | CANCELLED       | All tasks related to pickup and drop-off within the order group have been cancelled.
 |===
 
+=== Delivery Method
+
+The preferable method option to deliver the goods. 
+
+.Method
+|===
+| Method  | Description
+| CAR     | Deliver goods with transport car.
+| MOTOR   | Deliver goods with transport motor. 
+|===
+
 
 === Location 
 
-The Location Object represents geographical coordinates, consisting of `longitude` and `latitude`.
+The Location Object contains geographical coordinates, string full address and etc.
 
 .Location Properties
 |===
-| Name       | Type    | Description
-| longitude  | double  | The longitude coordinate of the location
-| latitude   | double  | The latitude coordinate of the location
+| Name       | Type    | Description | Required In Request
+| coordinate.longitude  | double  | The longitude coordinate of the location. | Yes
+| coordinate.latitude   | double  | The latitude coordinate of the location. | Yes
+| address | string | The address of the location. | Yes
+| unitNumber | string | The unit number of the location if present. | No
+| city | string | The city of the address | Yes
+| state | string | The state of the address | Yes
+| postalCode | string | The postal code of the address | Yes
+| country | string | The country of the address | Yes
+|===
+
+=== Order
+
+The drop off detail for order under an order group.
+
+.Order Properties
+|===
+| Name    | Type   | Description
+| ordinal | int | Sequence number of drop-off tasks. Start from zero.
+| recipientName | string | Drop-off task recipient name.
+| recipientPhone | string | Drop-off task recipient contact number. Must start with “+6” and without any space and dash. E.g. +601000000001.
+| product | string | Name of the products.
+| deliverDateTime | string | Drop-off task expected arrival date time.
+| dropOffLocation | <<Location>> | Drop-off task location.
+| noteToDriver | string | Extra note for driver for order. 
+| doorToDoor | boolean | Whether deliver door to door. Extra charges will incur to order group placement.
+| deliveryRange | string | Delivery distance from previous point in meter.
+| deliveryFee | string | Delivery fee in cent.
+| doorToDoorFee | int | Door to door charge amount.
+| hadDelivered | boolean | Drop off had delivered or not.
+| assigned | boolean | Drop off task had assigned to any driver or not.
 |===
