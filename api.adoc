@@ -81,6 +81,43 @@ GET /order-groups/:group_id
   "updated_at": "2023-01-02T12:34:56Z"
 }
 
+=== Confirm Order-Groups
+
+Confirm an order-group. This will close the order-group and dispatch the delivery orders.
+
+----
+POST /order-groups/:group_id/confirm
+----
+
+.Path Parameters
+|===
+| Name            | Type     | Description                                               | Required
+| group_id        | string   | ID of the order-group to retrieve                         | Yes
+|===
+
+.Response Example
+[source,json]
+{}
+
+=== Cancel Order-Groups
+
+Cancel an order-group. This will close the order-group and cancel all associated delivery orders.
+
+
+----
+POST /order-groups/:group_id/cancel
+----
+
+.Path Parameters
+|===
+| Name            | Type     | Description                                               | Required
+| group_id        | string   | ID of the order-group to retrieve                         | Yes
+|===
+
+.Response Example
+[source,json]
+{}
+
 
 === Create Delivery Orders
 
