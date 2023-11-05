@@ -9,48 +9,77 @@ POST /order-groups
 .Request Body
 |===
 | Name            | Type         | Description                                 | Required
-| name            | string       | The name or description of the order group. | Yes
-| pickup_location | <<Location>> | The pickup location for the order group.    | Yes
+| pickUpLocation | <<Location>> | The pickup location for the order group.    | Yes
+| pickUpContactNumber | String   | Pickup task recipient contact number. Must start with “+6” and without any space and dash. E.g. +601000000001 | Yes
+| pickUpDateTime | String | Pick up datetime | Yes
+| pickUpPersonName | String | Pickup task recipient name | No
+| deliveryMethod | String | Preferred delivery method - CAR or MOTOR. | No
+| halal | Boolean | Is the deliverable halal? | No
+| noteToDriver | String | Extra note to driver | No
 |===
 
 .Request Example
 [source,json]
 ----
 {
-  "name": "Afternoon Deliveries",
-  "pickup_location": 
-  {
-    "longitude": 123.456,
-    "latitude": 123.456
-  }
+  "pickUpLocation": {
+    "unitNumber": "A-01",
+    "address": "LG Level, Jalan Lagoon Selatan, Bandar Sunway, 47500, Selangor",
+    "coordinate": {
+      "longitude": 101.606772,
+      "latitude": 3.0647133
+    },
+    "city": "Kuala Lumpur",
+    "country": "Malaysia",
+    "state": "Federal Territory of Kuala Lumpur"
+  },
+  "pickUpContactNumber": "+601000000000",
+  "pickUpDateTime": "2022-01-29T01:15:00.000Z",
+  "pickUpPersonName": "Pickup Tester",
+  "deliveryMethod": "MOTOR",
+  "halal": true,
+  "noteToDriver": "Meet at lobby"
 }
 ----
 
 .Response Body
 |===
 | Name        | Type                   | Description
-| id          | int                    | Unique identifier for the newly created order group.
-| name        | string                 | The name or description of the order group.
+| id          | String                    | Unique identifier for the newly created order group.
 | status      | <<Order Group Status>> | Current status of the order group.
-| created_at  | string                 | Timestamp indicating when the order group was created.
-| updated_at  | string                 | Timestamp indicating the last time the order group was updated.
 |===
 
 .Response Example
 [source,json]
+----
 {
-  "id": 4,
-  "name": "Afternoon Deliveries",
-  "pickup_location": 
-  {
-    "longitude": 123.456,
-    "latitude": 123.456
-  },
-  "status": "OPEN",
-  "created_at": "2023-01-01T12:34:56Z",
-  "updated_at": "2023-01-02T12:34:56Z"
+    "id": "6547544cbe3e2e566799660e",
+    "version": 0,
+    "orders": [],
+    "status": "OPEN",
+    "pickUpPersonName": "Pickup Tester",
+    "pickUpContactNumber": "+60123456789",
+    "pickUpLocation": {
+        "coordinate": {
+            "longitude": 101.6024829,
+            "latitude": 3.0683743
+        },
+        "address": "Bandar Sunway, Bandar Sunway, 47500 Petaling Jaya, Selangor, Malaysia",
+        "unitNumber": "A1",
+        "city": "Petaling Jaya",
+        "state": "Selangor",
+        "postalCode": "47500",
+        "country": "Malaysia"
+    },
+    "pickUpDateTime": "2023-11-09T08:00:00Z",
+    "deliveryMethod": "MOTOR",
+    "halal": false,
+    "parkIt": false,
+    "paid": false,
+    "hadPickedUp": false,
+    "assigned": false
 }
-
+----
 
 === Get Order-Groups
 
@@ -68,18 +97,64 @@ GET /order-groups/:group_id
 
 .Response Example
 [source,json]
+----
 {
-  "id": 4,
-  "name": "Afternoon Deliveries",
-  "pickup_location": 
-  {
-    "longitude": 123.456,
-    "latitude": 123.456
-  },
-  "status": "OPEN",
-  "created_at": "2023-01-01T12:34:56Z",
-  "updated_at": "2023-01-02T12:34:56Z"
+    "id": "6547544cbe3e2e566799660e",
+    "version": 5,
+    "orders": [
+        {
+            "id": "6547571bbe3e2e566799660f",
+            "version": 1,
+            "ordinal": 0,
+            "status": "OPEN",
+            "recipientName": "Dropoff Tester1",
+            "recipientPhone": "+60123456788",
+            "deliverDateTime": "2023-11-09T09:15:00Z",
+            "dropOffLocation": {
+                "coordinate": {
+                    "longitude": 101.6168101,
+                    "latitude": 3.064785
+                },
+                "address": "Taylor's University Lakeside Campus, 1, Jln Taylors, 47500 Subang Jaya, Selangor, Malaysia",
+                "unitNumber": "",
+                "city": "Subang Jaya",
+                "state": "Selangor",
+                "postalCode": "47500",
+                "country": "Malaysia"
+            },
+            "deliveryRange": 5581,
+            "deliveryFee": 906,
+            "doorToDoorFee": 0,
+            "currency": "MYR",
+            "doorToDoor": false,
+            "hadDelivered": false,
+            "assigned": false
+        }
+    ],
+    "status": "OPEN",
+    "pickUpPersonName": "Pickup Tester",
+    "pickUpContactNumber": "+60123456789",
+    "pickUpLocation": {
+        "coordinate": {
+            "longitude": 101.6024829,
+            "latitude": 3.0683743
+        },
+        "address": "Bandar Sunway, Bandar Sunway, 47500 Petaling Jaya, Selangor, Malaysia",
+        "unitNumber": "A1",
+        "city": "Petaling Jaya",
+        "state": "Selangor",
+        "postalCode": "47500",
+        "country": "Malaysia"
+    },
+    "pickUpDateTime": "2023-11-09T08:00:00Z",
+    "deliveryMethod": "MOTOR",
+    "halal": false,
+    "parkIt": false,
+    "paid": false,
+    "hadPickedUp": false,
+    "assigned": false
 }
+----
 
 === Confirm Order-Groups
 
@@ -95,9 +170,89 @@ POST /order-groups/:group_id/confirm
 | group_id        | string   | ID of the order-group to retrieve | Yes
 |===
 
+.Request Body
+|===
+| Name            | Type         | Description                                 | Required
+| voucherId | string |     | No
+|===
+
+.Request Example
+[source,json]
+----
+{
+  "voucherId": "63e460347f65f8017f4d275b"
+}
+----
+
 .Response Example
 [source,json]
-{}
+----
+{
+  "id": "6547544cbe3e2e566799660e",
+  "version": 7,
+  "orders": [
+    {
+      "id": "6547571bbe3e2e566799660f",
+      "version": 2,
+      "ordinal": 0,
+      "status": "PROCESSING",
+      "recipientName": "Dropoff Tester1",
+      "recipientPhone": "+60123456788",
+      "deliverDateTime": "2023-11-09T09:15:00Z",
+      "dropOffLocation": {
+          "coordinate": {
+              "longitude": 101.6168101,
+              "latitude": 3.064785
+          },
+          "address": "Taylor's University Lakeside Campus, 1, Jln Taylors, 47500 Subang Jaya, Selangor, Malaysia",
+          "unitNumber": "",
+          "city": "Subang Jaya",
+          "state": "Selangor",
+          "postalCode": "47500",
+          "country": "Malaysia"
+      },
+      "deliveryRange": 5581,
+      "deliveryFee": 906,
+      "doorToDoorFee": 0,
+      "currency": "MYR",
+      "doorToDoor": false,
+      "invoiceDescription": "Delivery fee to Dropoff Tester1 at Taylor's University Lakeside Campus, 1, Jln Taylor (5.581 km)",
+      "deliveryJobId": "ceDN56*nNHzJxpYHLF~lb0W3",
+      "trackingLink": "https://onf.lt/4d8b9d0e0b",
+      "hadDelivered": false,
+      "assigned": false
+    }
+  ],
+  "status": "CONFIRMED",
+  "pickUpPersonName": "Pickup Tester",
+  "pickUpContactNumber": "+60123456789",
+  "pickUpLocation": {
+    "coordinate": {
+      "longitude": 101.6024829,
+      "latitude": 3.0683743
+    },
+    "address": "Bandar Sunway, Bandar Sunway, 47500 Petaling Jaya, Selangor, Malaysia",
+    "unitNumber": "A1",
+    "city": "Petaling Jaya",
+    "state": "Selangor",
+    "postalCode": "47500",
+    "country": "Malaysia"
+  },
+  "pickUpDateTime": "2023-11-09T08:00:00Z",
+  "deliveryMethod": "MOTOR",
+  "halal": false,
+  "parkIt": false,
+  "paid": false,
+  "paymentId": "65475b60a8965a13c5200f59",
+  "walletId": "63d93203c1f5cddd9554b1fd",
+  "invoiceTitle": "DeliverIt Invoice",
+  "pickUpJobId": "W8h~S3qvsWhhJv15yMt9oHmM",
+  "hadPickedUp": false,
+  "trackingLink": "https://onf.lt/4130b192ed",
+  "deliveryPlatform": "ONFLEET",
+  "assigned": false
+}
+----
 
 === Cancel Order-Groups
 
@@ -116,7 +271,73 @@ POST /order-groups/:group_id/cancel
 
 .Response Example
 [source,json]
-{}
+----
+{
+  "id": "6547544cbe3e2e566799660e",
+  "version": 8,
+  "orders": [
+    {
+      "id": "6547571bbe3e2e566799660f",
+      "version": 3,
+      "ordinal": 0,
+      "status": "CANCELLED",
+      "recipientName": "Dropoff Tester1",
+      "recipientPhone": "+60123456788",
+      "deliverDateTime": "2023-11-09T09:15:00Z",
+      "dropOffLocation": {
+        "coordinate": {
+          "longitude": 101.6168101,
+          "latitude": 3.064785
+        },
+        "address": "Taylor's University Lakeside Campus, 1, Jln Taylors, 47500 Subang Jaya, Selangor, Malaysia",
+        "unitNumber": "",
+        "city": "Subang Jaya",
+        "state": "Selangor",
+        "postalCode": "47500",
+        "country": "Malaysia"
+      },
+      "deliveryRange": 5581,
+      "deliveryFee": 906,
+      "doorToDoorFee": 0,
+      "currency": "MYR",
+      "doorToDoor": false,
+      "invoiceDescription": "Delivery fee to Dropoff Tester1 at Taylor's University Lakeside Campus, 1, Jln Taylor (5.581 km)",
+      "deliveryJobId": "ceDN56*nNHzJxpYHLF~lb0W3",
+      "trackingLink": "https://onf.lt/4d8b9d0e0b",
+      "hadDelivered": false,
+      "assigned": false
+    }
+  ],
+  "status": "CANCELLED",
+  "pickUpPersonName": "Pickup Tester",
+  "pickUpContactNumber": "+60123456789",
+  "pickUpLocation": {
+    "coordinate": {
+      "longitude": 101.6024829,
+      "latitude": 3.0683743
+    },
+    "address": "Bandar Sunway, Bandar Sunway, 47500 Petaling Jaya, Selangor, Malaysia",
+    "unitNumber": "A1",
+    "city": "Petaling Jaya",
+    "state": "Selangor",
+    "postalCode": "47500",
+    "country": "Malaysia"
+  },
+  "pickUpDateTime": "2023-11-09T08:00:00Z",
+  "deliveryMethod": "MOTOR",
+  "halal": false,
+  "parkIt": false,
+  "paid": false,
+  "paymentId": "65475b60a8965a13c5200f59",
+  "walletId": "63d93203c1f5cddd9554b1fd",
+  "invoiceTitle": "DeliverIt Invoice",
+  "pickUpJobId": "W8h~S3qvsWhhJv15yMt9oHmM",
+  "hadPickedUp": false,
+  "trackingLink": "https://onf.lt/4130b192ed",
+  "deliveryPlatform": "ONFLEET",
+  "assigned": false
+}
+----
 
 
 === Create Orders
@@ -137,17 +358,70 @@ POST /order-groups/:group_id/orders
 .Request Parameters Table:
 |===
 | Name    | Type   | Description
-| address | string | Delivery address
-| status  | string | Delivery status (e.g., "Pending", "Delivered")
+| ordinal | int | ordering of the order in order group
+| recipientName | string | 
+| recipientPhone | string |
+| product | string |
+| deliverDateTime | string | 
+| dropOffLocation | <<Location>> | Delivery address
+| noteToDriver | string | 
+
 |===
+
+.Resquest Example
+[source,json]
+----
+{
+	"ordinal": 0,
+	"recipientName": "Dropoff Tester1",
+	"recipientPhone": "+60123456788",
+	"deliverDateTime": "2023-11-09T09:15:00.000Z",
+	"dropOffLocation": {
+		"unitNumber": "",
+		"address": "Taylor's University Lakeside Campus, 1, Jln Taylors, 47500 Subang Jaya, Selangor, Malaysia",
+		"coordinate": {
+			"latitude": 3.064785,
+			"longitude": 101.6168101
+		},
+		"city": "Subang Jaya",
+		"country": "Malaysia",
+		"state": "Selangor",
+		"postalCode": "47500"
+	},
+	"doorToDoor": false
+}
+----
 
 .Response Example
 [source,json]
 ----
 {
-  "id": 3,
-  "address": "789 Oak St",
-  "status": "Pending"
+  "id": "6547571bbe3e2e566799660f",
+  "version": 0,
+  "ordinal": 0,
+  "status": "OPEN",
+  "recipientName": "Dropoff Tester1",
+  "recipientPhone": "+60123456788",
+  "deliverDateTime": "2023-11-09T09:15:00Z",
+  "dropOffLocation": {
+    "coordinate": {
+      "longitude": 101.6168101,
+      "latitude": 3.064785
+    },
+    "address": "Taylor's University Lakeside Campus, 1, Jln Taylors, 47500 Subang Jaya, Selangor, Malaysia",
+    "unitNumber": "",
+    "city": "Subang Jaya",
+    "state": "Selangor",
+    "postalCode": "47500",
+    "country": "Malaysia"
+  },
+  "deliveryRange": 5581,
+  "deliveryFee": 906,
+  "doorToDoorFee": 0,
+  "currency": "MYR",
+  "doorToDoor": false,
+  "hadDelivered": false,
+  "assigned": false
 }
 ----
 
@@ -171,21 +445,51 @@ GET /order-groups/:group_id/orders/:id
 |===
 | Field      | Type   | Description
 | id         | int    | Unique identifier for the specific delivery order.
-| address    | string | The address for the delivery.
-| status     | string | Current status of the delivery order.
-| created_at | string | Timestamp indicating when the delivery order was created.
-| updated_at | string | Timestamp indicating the last time the delivery order was updated.
+| ordinal | int | ordering of the order in order group
+| recipientName | string | 
+| recipientPhone | string |
+| product | string |
+| deliverDateTime | string | 
+| dropOffLocation | <<Location>> | Delivery address
+| noteToDriver | string | 
+| deliveryRange | string | delivery distance from previous point in meter
+| deliveryFee | string | delivery fee in cent
+| doorToDoorFee | int | door to door charge amount
+| doorToDoor | boolean | require door to door or not 
+| hadDelivered | boolean | had delivered or not
+| assigned | boolean | assigned to any driver or not
 |===
 
 .Response Example
 [source,json]
 ----
 {
-  "id": 1,
-  "address": "123 Main St",
-  "status": "Pending",
-  "created_at": "2023-01-01T12:34:56Z",
-  "updated_at": "2023-01-02T12:34:56Z"
+  "id": "6547571bbe3e2e566799660f",
+  "version": 0,
+  "ordinal": 0,
+  "status": "OPEN",
+  "recipientName": "Dropoff Tester1",
+  "recipientPhone": "+60123456788",
+  "deliverDateTime": "2023-11-09T09:15:00Z",
+  "dropOffLocation": {
+    "coordinate": {
+      "longitude": 101.6168101,
+      "latitude": 3.064785
+    },
+    "address": "Taylor's University Lakeside Campus, 1, Jln Taylors, 47500 Subang Jaya, Selangor, Malaysia",
+    "unitNumber": "",
+    "city": "Subang Jaya",
+    "state": "Selangor",
+    "postalCode": "47500",
+    "country": "Malaysia"
+  },
+  "deliveryRange": 5581,
+  "deliveryFee": 906,
+  "doorToDoorFee": 0,
+  "currency": "MYR",
+  "doorToDoor": false,
+  "hadDelivered": false,
+  "assigned": false
 }
 ----
 
