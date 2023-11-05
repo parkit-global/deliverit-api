@@ -8,9 +8,9 @@ POST /order-groups
 
 .Request Body
 |===
-| Name            | Type     | Description                                               | Required
-| name            | string   | The name or description of the order group.               | Yes
-| pickup_location | location | The pickup location for the order group. See <<Location>> | Yes
+| Name            | Type         | Description                                 | Required
+| name            | string       | The name or description of the order group. | Yes
+| pickup_location | <<Location>> | The pickup location for the order group.    | Yes
 |===
 
 .Request Example
@@ -28,12 +28,12 @@ POST /order-groups
 
 .Response Body
 |===
-| Name        | Type    | Description
-| id          | int     | Unique identifier for the newly created order group.
-| name        | string  | The name or description of the order group.
-| status      | string  | Current status of the order group. See <<Order Group Status>>
-| created_at  | string  | Timestamp indicating when the order group was created.
-| updated_at  | string  | Timestamp indicating the last time the order group was updated.
+| Name        | Type                   | Description
+| id          | int                    | Unique identifier for the newly created order group.
+| name        | string                 | The name or description of the order group.
+| status      | <<Order Group Status>> | Current status of the order group.
+| created_at  | string                 | Timestamp indicating when the order group was created.
+| updated_at  | string                 | Timestamp indicating the last time the order group was updated.
 |===
 
 .Response Example
@@ -62,8 +62,8 @@ GET /order-groups/:group_id
 
 .Path Parameters
 |===
-| Name            | Type     | Description                                               | Required
-| group_id        | string   | ID of the order-group to retrieve                         | Yes
+| Name            | Type     | Description                       | Required
+| group_id        | string   | ID of the order-group to retrieve | Yes
 |===
 
 .Response Example
@@ -91,8 +91,8 @@ POST /order-groups/:group_id/confirm
 
 .Path Parameters
 |===
-| Name            | Type     | Description                                               | Required
-| group_id        | string   | ID of the order-group to retrieve                         | Yes
+| Name            | Type     | Description                       | Required
+| group_id        | string   | ID of the order-group to retrieve | Yes
 |===
 
 .Response Example
@@ -110,8 +110,8 @@ POST /order-groups/:group_id/cancel
 
 .Path Parameters
 |===
-| Name            | Type     | Description                                               | Required
-| group_id        | string   | ID of the order-group to retrieve                         | Yes
+| Name            | Type     | Description                       | Required
+| group_id        | string   | ID of the order-group to retrieve | Yes
 |===
 
 .Response Example
@@ -119,7 +119,7 @@ POST /order-groups/:group_id/cancel
 {}
 
 
-=== Create Delivery Orders
+=== Create Orders
 
 Creates a new delivery order within a specific order-group.
 
@@ -152,7 +152,7 @@ POST /order-groups/:group_id/orders
 ----
 
 
-=== Get Delivery Orders
+=== Get Orders
 
 Retrieves details of a specific delivery order within a given order-group.
 
