@@ -9,48 +9,86 @@ POST /order-groups
 .Request Body
 |===
 | Name            | Type         | Description                                 | Required
-| name            | string       | The name or description of the order group. | Yes
-| pickup_location | <<Location>> | The pickup location for the order group.    | Yes
+| pickUpLocation | <<Location>> | The pickup location for the order group.    | Yes
+| pickUpContactNumber | String   | Pickup task recipient contact number. Must start with “+6” and without any space and dash. E.g. +601000000001. | Yes
+| pickUpDateTime | String | Pick up datetime. | Yes
+| pickUpPersonName | String | Pickup task recipient name. | No
+| deliveryMethod | <<DeliveryMethod>> | Preferred delivery method. | No
+| halal | Boolean | Is the deliverable halal or not. | No
+| noteToDriver | String | Extra note to driver for pick up. | No
 |===
 
 .Request Example
 [source,json]
 ----
 {
-  "name": "Afternoon Deliveries",
-  "pickup_location": 
-  {
-    "longitude": 123.456,
-    "latitude": 123.456
-  }
+  "pickUpLocation": {
+    "unitNumber": "A-01",
+    "address": "LG Level, Jalan Lagoon Selatan, Bandar Sunway, 47500, Selangor",
+    "coordinate": {
+      "longitude": 101.606772,
+      "latitude": 3.0647133
+    },
+    "city": "Kuala Lumpur",
+    "country": "Malaysia",
+    "state": "Federal Territory of Kuala Lumpur"
+  },
+  "pickUpContactNumber": "+601000000000",
+  "pickUpDateTime": "2022-01-29T01:15:00.000Z",
+  "pickUpPersonName": "Pickup Tester",
+  "deliveryMethod": "MOTOR",
+  "halal": true,
+  "noteToDriver": "Meet at lobby"
 }
 ----
 
 .Response Body
 |===
 | Name        | Type                   | Description
-| id          | int                    | Unique identifier for the newly created order group.
-| name        | string                 | The name or description of the order group.
+| id          | String                    | Unique identifier for the newly created order group.
 | status      | <<Order Group Status>> | Current status of the order group.
-| created_at  | string                 | Timestamp indicating when the order group was created.
-| updated_at  | string                 | Timestamp indicating the last time the order group was updated.
+| pickUpLocation | <<Location>> | The pickup location for the order group.
+| pickUpContactNumber | String   | Pickup task recipient contact number. Must start with “+6” and without any space and dash. E.g. +601000000001.
+| pickUpDateTime | String | Pick up datetime.
+| pickUpPersonName | String | Pickup task recipient name.
+| deliveryMethod | <<DeliveryMethod>> | Preferred delivery method.
+| halal | Boolean | Is the deliverable halal?
+| noteToDriver | String | Extra note to driver for pick up.
+| paid | boolean | Order group had paid or not.
+| hadPickedUp | boolean | Pick up task had completed or not.
+| assigned | boolean | Pick up task had assigned to worker or not. 
+| orders | list<<Order>> | List of drop off details for this order group pick up.
 |===
 
 .Response Example
 [source,json]
+----
 {
-  "id": 4,
-  "name": "Afternoon Deliveries",
-  "pickup_location": 
-  {
-    "longitude": 123.456,
-    "latitude": 123.456
-  },
-  "status": "OPEN",
-  "created_at": "2023-01-01T12:34:56Z",
-  "updated_at": "2023-01-02T12:34:56Z"
+    "id": "6547544cbe3e2e566799660e",
+    "orders": [],
+    "status": "OPEN",
+    "pickUpPersonName": "Pickup Tester",
+    "pickUpContactNumber": "+60123456789",
+    "pickUpLocation": {
+        "coordinate": {
+            "longitude": 101.6024829,
+            "latitude": 3.0683743
+        },
+        "address": "Bandar Sunway, Bandar Sunway, 47500 Petaling Jaya, Selangor, Malaysia",
+        "unitNumber": "A1",
+        "city": "Petaling Jaya",
+        "state": "Selangor",
+        "postalCode": "47500",
+        "country": "Malaysia"
+    },
+    "pickUpDateTime": "2023-11-09T08:00:00Z",
+    "deliveryMethod": "MOTOR",
+    "halal": false,
+    "paid": false,
+    "hadPickedUp": false,
+    "assigned": false
 }
-
+----
 
 === Get Order-Groups
 
@@ -66,20 +104,81 @@ GET /order-groups/:group_id
 | group_id        | string   | ID of the order-group to retrieve | Yes
 |===
 
+.Response Body
+|===
+| Name        | Type                   | Description
+| id          | String                    | Unique identifier for the newly created order group.
+| status      | <<Order Group Status>> | Current status of the order group.
+| pickUpLocation | <<Location>> | The pickup location for the order group.
+| pickUpContactNumber | String   | Pickup task recipient contact number. Must start with “+6” and without any space and dash. E.g. +601000000001.
+| pickUpDateTime | String | Pick up datetime.
+| pickUpPersonName | String | Pickup task recipient name.
+| deliveryMethod | <<DeliveryMethod>> | Preferred delivery method.
+| halal | Boolean | Is the deliverable halal?
+| noteToDriver | String | Extra note to driver for pick up.
+| paid | boolean | Order group had paid or not.
+| hadPickedUp | boolean | Pick up task had completed or not.
+| assigned | boolean | Pick up task had assigned to worker or not. 
+| orders | list<<Order>> | List of drop off details for this order group pick up.
+|===
+
 .Response Example
 [source,json]
+----
 {
-  "id": 4,
-  "name": "Afternoon Deliveries",
-  "pickup_location": 
-  {
-    "longitude": 123.456,
-    "latitude": 123.456
-  },
+  "id": "6547544cbe3e2e566799660e",
+  "orders": [
+    {
+      "id": "6547571bbe3e2e566799660f",
+      "ordinal": 0,
+      "status": "OPEN",
+      "recipientName": "Dropoff Tester1",
+      "recipientPhone": "+60123456788",
+      "deliverDateTime": "2023-11-09T09:15:00Z",
+      "dropOffLocation": {
+        "coordinate": {
+          "longitude": 101.6168101,
+          "latitude": 3.064785
+        },
+        "address": "Taylor's University Lakeside Campus, 1, Jln Taylors, 47500 Subang Jaya, Selangor, Malaysia",
+        "unitNumber": "",
+        "city": "Subang Jaya",
+        "state": "Selangor",
+        "postalCode": "47500",
+        "country": "Malaysia"
+      },
+      "deliveryRange": 5581,
+      "deliveryFee": 906,
+      "doorToDoorFee": 0,
+      "currency": "MYR",
+      "doorToDoor": false,
+      "hadDelivered": false,
+      "assigned": false
+    }
+  ],
   "status": "OPEN",
-  "created_at": "2023-01-01T12:34:56Z",
-  "updated_at": "2023-01-02T12:34:56Z"
+  "pickUpPersonName": "Pickup Tester",
+  "pickUpContactNumber": "+60123456789",
+  "pickUpLocation": {
+    "coordinate": {
+      "longitude": 101.6024829,
+      "latitude": 3.0683743
+    },
+    "address": "Bandar Sunway, Bandar Sunway, 47500 Petaling Jaya, Selangor, Malaysia",
+    "unitNumber": "A1",
+    "city": "Petaling Jaya",
+    "state": "Selangor",
+    "postalCode": "47500",
+    "country": "Malaysia"
+  },
+  "pickUpDateTime": "2023-11-09T08:00:00Z",
+  "deliveryMethod": "MOTOR",
+  "halal": false,
+  "paid": false,
+  "hadPickedUp": false,
+  "assigned": false
 }
+----
 
 === Confirm Order-Groups
 
@@ -95,9 +194,100 @@ POST /order-groups/:group_id/confirm
 | group_id        | string   | ID of the order-group to retrieve | Yes
 |===
 
+.Request Body
+|===
+| Name            | Type         | Description                                 | Required
+| voucherId | string | Voucher id apply to order group payment. | No
+|===
+
+.Request Example
+[source,json]
+----
+{
+  "voucherId": "63e460347f65f8017f4d275b"
+}
+----
+
+.Response Body
+|===
+| Name        | Type                   | Description
+| id          | String                    | Unique identifier for the newly created order group.
+| status      | <<Order Group Status>> | Current status of the order group.
+| pickUpLocation | <<Location>> | The pickup location for the order group.
+| pickUpContactNumber | String   | Pickup task recipient contact number. Must start with “+6” and without any space and dash. E.g. +601000000001.
+| pickUpDateTime | String | Pick up datetime.
+| pickUpPersonName | String | Pickup task recipient name.
+| deliveryMethod | <<DeliveryMethod>> | Preferred delivery method.
+| halal | Boolean | Is the deliverable halal?
+| noteToDriver | String | Extra note to driver for pick up.
+| paid | boolean | Order group had paid or not.
+| hadPickedUp | boolean | Pick up task had completed or not.
+| assigned | boolean | Pick up task had assigned to worker or not. 
+| orders | list<<Order>> | List of drop off details for this order group pick up.
+| trackingLink | string | Tracking URL for delivery process. 
+|===
+
 .Response Example
 [source,json]
-{}
+----
+{
+  "id": "6547544cbe3e2e566799660e",
+  "orders": [
+    {
+      "id": "6547571bbe3e2e566799660f",
+      "ordinal": 0,
+      "status": "PROCESSING",
+      "recipientName": "Dropoff Tester1",
+      "recipientPhone": "+60123456788",
+      "deliverDateTime": "2023-11-09T09:15:00Z",
+      "dropOffLocation": {
+          "coordinate": {
+              "longitude": 101.6168101,
+              "latitude": 3.064785
+          },
+          "address": "Taylor's University Lakeside Campus, 1, Jln Taylors, 47500 Subang Jaya, Selangor, Malaysia",
+          "unitNumber": "",
+          "city": "Subang Jaya",
+          "state": "Selangor",
+          "postalCode": "47500",
+          "country": "Malaysia"
+      },
+      "deliveryRange": 5581,
+      "deliveryFee": 906,
+      "doorToDoorFee": 0,
+      "currency": "MYR",
+      "doorToDoor": false,
+      "invoiceDescription": "Delivery fee to Dropoff Tester1 at Taylor's University Lakeside Campus, 1, Jln Taylor (5.581 km)",
+      "deliveryJobId": "ceDN56*nNHzJxpYHLF~lb0W3",
+      "trackingLink": "https://onf.lt/4d8b9d0e0b",
+      "hadDelivered": false,
+      "assigned": false
+    }
+  ],
+  "status": "CONFIRMED",
+  "pickUpPersonName": "Pickup Tester",
+  "pickUpContactNumber": "+60123456789",
+  "pickUpLocation": {
+    "coordinate": {
+      "longitude": 101.6024829,
+      "latitude": 3.0683743
+    },
+    "address": "Bandar Sunway, Bandar Sunway, 47500 Petaling Jaya, Selangor, Malaysia",
+    "unitNumber": "A1",
+    "city": "Petaling Jaya",
+    "state": "Selangor",
+    "postalCode": "47500",
+    "country": "Malaysia"
+  },
+  "pickUpDateTime": "2023-11-09T08:00:00Z",
+  "deliveryMethod": "MOTOR",
+  "halal": false,
+  "paid": false,
+  "hadPickedUp": false,
+  "trackingLink": "https://onf.lt/4130b192ed",
+  "assigned": false
+}
+----
 
 === Cancel Order-Groups
 
@@ -114,9 +304,86 @@ POST /order-groups/:group_id/cancel
 | group_id        | string   | ID of the order-group to retrieve | Yes
 |===
 
+.Response Body
+|===
+| Name        | Type                   | Description
+| id          | String                    | Unique identifier for the newly created order group.
+| status      | <<Order Group Status>> | Current status of the order group.
+| pickUpLocation | <<Location>> | The pickup location for the order group.
+| pickUpContactNumber | String   | Pickup task recipient contact number. Must start with “+6” and without any space and dash. E.g. +601000000001.
+| pickUpDateTime | String | Pick up datetime.
+| pickUpPersonName | String | Pickup task recipient name.
+| deliveryMethod | <<DeliveryMethod>> | Preferred delivery method.
+| halal | Boolean | Is the deliverable halal?
+| noteToDriver | String | Extra note to driver for pick up.
+| paid | boolean | Order group had paid or not.
+| hadPickedUp | boolean | Pick up task had completed or not.
+| assigned | boolean | Pick up task had assigned to worker or not. 
+| orders | list<<Order>> | List of drop off details for this order group pick up.
+| trackingLink | string | Tracking URL for delivery process. 
+|===
+
 .Response Example
 [source,json]
-{}
+----
+{
+  "id": "6547544cbe3e2e566799660e",
+  "orders": [
+    {
+      "id": "6547571bbe3e2e566799660f",
+      "ordinal": 0,
+      "status": "CANCELLED",
+      "recipientName": "Dropoff Tester1",
+      "recipientPhone": "+60123456788",
+      "deliverDateTime": "2023-11-09T09:15:00Z",
+      "dropOffLocation": {
+        "coordinate": {
+          "longitude": 101.6168101,
+          "latitude": 3.064785
+        },
+        "address": "Taylor's University Lakeside Campus, 1, Jln Taylors, 47500 Subang Jaya, Selangor, Malaysia",
+        "unitNumber": "",
+        "city": "Subang Jaya",
+        "state": "Selangor",
+        "postalCode": "47500",
+        "country": "Malaysia"
+      },
+      "deliveryRange": 5581,
+      "deliveryFee": 906,
+      "doorToDoorFee": 0,
+      "currency": "MYR",
+      "doorToDoor": false,
+      "invoiceDescription": "Delivery fee to Dropoff Tester1 at Taylor's University Lakeside Campus, 1, Jln Taylor (5.581 km)",
+      "deliveryJobId": "ceDN56*nNHzJxpYHLF~lb0W3",
+      "trackingLink": "https://onf.lt/4d8b9d0e0b",
+      "hadDelivered": false,
+      "assigned": false
+    }
+  ],
+  "status": "CANCELLED",
+  "pickUpPersonName": "Pickup Tester",
+  "pickUpContactNumber": "+60123456789",
+  "pickUpLocation": {
+    "coordinate": {
+      "longitude": 101.6024829,
+      "latitude": 3.0683743
+    },
+    "address": "Bandar Sunway, Bandar Sunway, 47500 Petaling Jaya, Selangor, Malaysia",
+    "unitNumber": "A1",
+    "city": "Petaling Jaya",
+    "state": "Selangor",
+    "postalCode": "47500",
+    "country": "Malaysia"
+  },
+  "pickUpDateTime": "2023-11-09T08:00:00Z",
+  "deliveryMethod": "MOTOR",
+  "halal": false,
+  "paid": false,
+  "hadPickedUp": false,
+  "trackingLink": "https://onf.lt/4130b192ed",
+  "assigned": false
+}
+----
 
 
 === Create Orders
@@ -137,17 +404,87 @@ POST /order-groups/:group_id/orders
 .Request Parameters Table:
 |===
 | Name    | Type   | Description
-| address | string | Delivery address
-| status  | string | Delivery status (e.g., "Pending", "Delivered")
+| ordinal | int | Sequence number of drop-off tasks. Start from zero.
+| recipientName | string | Drop-off task recipient name.
+| recipientPhone | string | Drop-off task recipient contact number. Must start with “+6” and without any space and dash. E.g. +601000000001.
+| product | string | Name of the products.
+| deliverDateTime | string | Drop-off task expected arrival date time.
+| dropOffLocation | <<Location>> | Drop-off task location.
+| noteToDriver | string | Extra note for driver for order. 
+| doorToDoor | boolean | Whether deliver door to door. Extra charges will incur to order group placement.
+|===
+
+.Resquest Example
+[source,json]
+----
+{
+	"ordinal": 0,
+	"recipientName": "Dropoff Tester1",
+	"recipientPhone": "+60123456788",
+	"deliverDateTime": "2023-11-09T09:15:00.000Z",
+	"dropOffLocation": {
+		"unitNumber": "",
+		"address": "Taylor's University Lakeside Campus, 1, Jln Taylors, 47500 Subang Jaya, Selangor, Malaysia",
+		"coordinate": {
+			"latitude": 3.064785,
+			"longitude": 101.6168101
+		},
+		"city": "Subang Jaya",
+		"country": "Malaysia",
+		"state": "Selangor",
+		"postalCode": "47500"
+	},
+	"doorToDoor": false
+}
+----
+
+.Response Body
+|===
+| Name    | Type   | Description
+| ordinal | int | Sequence number of drop-off tasks. Start from zero.
+| recipientName | string | Drop-off task recipient name.
+| recipientPhone | string | Drop-off task recipient contact number. Must start with “+6” and without any space and dash. E.g. +601000000001.
+| product | string | Name of the products.
+| deliverDateTime | string | Drop-off task expected arrival date time.
+| dropOffLocation | <<Location>> | Drop-off task location.
+| noteToDriver | string | Extra note for driver for order. 
+| doorToDoor | boolean | Whether deliver door to door. Extra charges will incur to order group placement.
+| deliveryRange | string | Delivery distance from previous point in meter.
+| deliveryFee | string | Delivery fee in cent.
+| doorToDoorFee | int | Door to door charge amount.
+| hadDelivered | boolean | Drop off had delivered or not.
+| assigned | boolean | Drop off task had assigned to any driver or not.
 |===
 
 .Response Example
 [source,json]
 ----
 {
-  "id": 3,
-  "address": "789 Oak St",
-  "status": "Pending"
+  "id": "6547571bbe3e2e566799660f",
+  "ordinal": 0,
+  "status": "OPEN",
+  "recipientName": "Dropoff Tester1",
+  "recipientPhone": "+60123456788",
+  "deliverDateTime": "2023-11-09T09:15:00Z",
+  "dropOffLocation": {
+    "coordinate": {
+      "longitude": 101.6168101,
+      "latitude": 3.064785
+    },
+    "address": "Taylor's University Lakeside Campus, 1, Jln Taylors, 47500 Subang Jaya, Selangor, Malaysia",
+    "unitNumber": "",
+    "city": "Subang Jaya",
+    "state": "Selangor",
+    "postalCode": "47500",
+    "country": "Malaysia"
+  },
+  "deliveryRange": 5581,
+  "deliveryFee": 906,
+  "doorToDoorFee": 0,
+  "currency": "MYR",
+  "doorToDoor": false,
+  "hadDelivered": false,
+  "assigned": false
 }
 ----
 
@@ -170,22 +507,51 @@ GET /order-groups/:group_id/orders/:id
 .Response Fields Table
 |===
 | Field      | Type   | Description
-| id         | int    | Unique identifier for the specific delivery order.
-| address    | string | The address for the delivery.
-| status     | string | Current status of the delivery order.
-| created_at | string | Timestamp indicating when the delivery order was created.
-| updated_at | string | Timestamp indicating the last time the delivery order was updated.
+| ordinal | int | Sequence number of drop-off tasks. Start from zero.
+| recipientName | string | Drop-off task recipient name.
+| recipientPhone | string | Drop-off task recipient contact number. Must start with “+6” and without any space and dash. E.g. +601000000001.
+| product | string | Name of the products.
+| deliverDateTime | string | Drop-off task expected arrival date time.
+| dropOffLocation | <<Location>> | Drop-off task location.
+| noteToDriver | string | Extra note for driver for order. 
+| doorToDoor | boolean | Whether deliver door to door. Extra charges will incur to order group placement.
+| deliveryRange | string | Delivery distance from previous point in meter.
+| deliveryFee | string | Delivery fee in cent.
+| doorToDoorFee | int | Door to door charge amount.
+| hadDelivered | boolean | Drop off had delivered or not.
+| assigned | boolean | Drop off task had assigned to any driver or not.
 |===
 
 .Response Example
 [source,json]
 ----
 {
-  "id": 1,
-  "address": "123 Main St",
-  "status": "Pending",
-  "created_at": "2023-01-01T12:34:56Z",
-  "updated_at": "2023-01-02T12:34:56Z"
+  "id": "6547571bbe3e2e566799660f",
+  "version": 0,
+  "ordinal": 0,
+  "status": "OPEN",
+  "recipientName": "Dropoff Tester1",
+  "recipientPhone": "+60123456788",
+  "deliverDateTime": "2023-11-09T09:15:00Z",
+  "dropOffLocation": {
+    "coordinate": {
+      "longitude": 101.6168101,
+      "latitude": 3.064785
+    },
+    "address": "Taylor's University Lakeside Campus, 1, Jln Taylors, 47500 Subang Jaya, Selangor, Malaysia",
+    "unitNumber": "",
+    "city": "Subang Jaya",
+    "state": "Selangor",
+    "postalCode": "47500",
+    "country": "Malaysia"
+  },
+  "deliveryRange": 5581,
+  "deliveryFee": 906,
+  "doorToDoorFee": 0,
+  "currency": "MYR",
+  "doorToDoor": false,
+  "hadDelivered": false,
+  "assigned": false
 }
 ----
 
