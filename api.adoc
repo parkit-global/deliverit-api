@@ -194,20 +194,6 @@ POST /order-groups/:group_id/confirm
 | group_id        | string   | ID of the order-group to retrieve | Yes
 |===
 
-.Request Body
-|===
-| Name            | Type         | Description                                 | Required
-| voucherId | string | Voucher id apply to order group payment. | No
-|===
-
-.Request Example
-[source,json]
-----
-{
-  "voucherId": "63e460347f65f8017f4d275b"
-}
-----
-
 .Response Body
 |===
 | Name        | Type                   | Description
