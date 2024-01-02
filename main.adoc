@@ -12,6 +12,7 @@ This API allows you to manage delivery orders and their associated order-groups.
 == Base URL
 
 The base URL for the API is `https://external.deliveritmy.com`.
+Staging environment base URL for the API is `https://external.deliverit-staging.com`.
 
 == Authentication
 
