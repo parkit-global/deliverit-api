@@ -11,7 +11,7 @@ This API allows you to manage delivery orders and their associated order-groups.
 
 == Base URL
 
-The base URL for the API is `http://external.deliveritmy.com`.
+The base URL for the API is `https://external.deliveritmy.com`.
 
 == Authentication
 
